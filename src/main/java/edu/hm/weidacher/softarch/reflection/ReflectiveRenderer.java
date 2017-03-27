@@ -2,7 +2,9 @@ package edu.hm.weidacher.softarch.reflection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import edu.hm.weidacher.softarch.reflection.annotation.RenderMe;
@@ -100,8 +102,20 @@ public class ReflectiveRenderer implements Renderer {
      * @return stream of all annotated fields of the subject
      */
     private Stream<Field> getFields() {
-        // TODO also get fields of subclasses
-        return Arrays.stream(subject.getClass().getDeclaredFields())
+        final Class subjectClass = subject.getClass();
+        final List<Field> fields = new ArrayList<>();
+
+        // add fields of the subjects declared fields
+        fields.addAll(Arrays.asList(subjectClass.getDeclaredFields()));
+
+        // add all fields for the superclasses
+        Class superClassClass = subjectClass.getSuperclass();
+        do {
+            fields.addAll(Arrays.asList(superClassClass.getDeclaredFields()));
+            superClassClass = superClassClass.getSuperclass();
+        } while (superClassClass != Object.class);
+
+        return fields.stream()
             .filter(field -> field.isAnnotationPresent(RENDER_ANNOTATION));
     }
 }
