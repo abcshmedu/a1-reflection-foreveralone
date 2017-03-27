@@ -3,6 +3,7 @@ import org.junit.Test;
 
 import edu.hm.weidacher.softarch.reflection.ReflectiveRenderer;
 import edu.hm.weidacher.softarch.reflection.Renderer;
+import edu.hm.weidacher.softarch.reflection.annotation.RenderMe;
 
 /**
  * @author Simon Weidacher <simon.weidacher@timebay.eu>
@@ -24,14 +25,14 @@ public class RendererTest {
     }
 
     class Testinger {
-        int xInt;
-        long xLong;
-        String xString;
-        double xDouble;
-        float xFloat;
+        @RenderMe int xInt;
+        @RenderMe long xLong;
+        @RenderMe String xString;
+        @RenderMe double xDouble;
+        @RenderMe float xFloat;
 
 	public Testinger() {
-	    xInt = ((int) Math.random()*Integer.MAX_VALUE);
+	    xInt = (int) (Math.random()*Integer.MAX_VALUE);
 	    xLong = ((long) (Math.random() * Long.MAX_VALUE));
 	    xString = "spadigusfgonuadsgvpisdfbng";
 	    xDouble = Math.random();
