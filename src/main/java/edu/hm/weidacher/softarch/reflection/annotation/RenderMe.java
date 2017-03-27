@@ -1,4 +1,4 @@
-package edu.hm.weidacher.softarch.reflection;
+package edu.hm.weidacher.softarch.reflection.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
