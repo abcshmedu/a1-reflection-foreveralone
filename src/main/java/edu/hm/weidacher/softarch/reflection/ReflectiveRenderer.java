@@ -93,8 +93,8 @@ public class ReflectiveRenderer implements Renderer {
      * @return stream of all annotated fields of the subject
      */
     private Stream<Field> getFields() {
-	return Arrays.stream(
-	    subject.getClass().getFields())
+        // TODO also get fields of subclasses
+	return Arrays.stream(subject.getClass().getDeclaredFields())
 	    .filter(field -> field.isAnnotationPresent(RENDER_ANNOTATION));
     }
 }
