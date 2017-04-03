@@ -40,6 +40,7 @@ public class ReflectiveRenderer implements Renderer {
      *
      * @return a representative string of the object to render
      */
+    @Override
     public String render() {
         StringBuilder sb = new StringBuilder();
         getFields()// get annotated fields
