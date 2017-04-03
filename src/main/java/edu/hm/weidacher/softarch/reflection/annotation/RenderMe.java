@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface RenderMe {
 
-    String DEFAULT_RENDERING_PROVIDER = "";
+    String DEFAULT_RENDERING_PROVIDER = "edu.hm.weidacher.softarch.reflection.ReflectiveRenderer";
 
     /**
      * Declares which rendering provider to use.
