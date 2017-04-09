@@ -69,8 +69,8 @@ public class ArrayRenderer implements Renderer {
 	}
 
 	// last element treated specially because of StringBuilder
-	Object lastElemenent = subject[subject.length -1];
-	sb.append(String.format("%s]", toStringOfNullable(lastElemenent)));
+	Object lastElement = subject[subject.length - 1];
+	sb.append(String.format("%s]", toStringOfNullable(lastElement)));
 
 	return sb.toString();
     }
