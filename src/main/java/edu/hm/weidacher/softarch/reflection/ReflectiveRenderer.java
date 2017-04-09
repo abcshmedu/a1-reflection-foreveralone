@@ -78,22 +78,22 @@ public class ReflectiveRenderer implements Renderer {
         name = field.getName();
         type = field.getType().getSimpleName();
 
-	// check if the annotation want's another renderer
-	Optional<Renderer> specialRenderer = getSpecialRenderer(field);
-	if (specialRenderer.isPresent()) {
+        // check if the annotation want's another renderer
+        Optional<Renderer> specialRenderer = getSpecialRenderer(field);
+        if (specialRenderer.isPresent()) {
 
-	    // initialize the renderer and let it deal with the problem
-	    value = specialRenderer.get().render();
+            // initialize the renderer and let it deal with the problem
+            value = specialRenderer.get().render();
 
-	} else {
+        } else {
 
-	    try {
-		value = field.get(subject).toString();
-	    } catch (IllegalAccessException e) {
-		throw new AssertionError("Field with modified access modifier inaccessible", e);
-	    }
+            try {
+                value = field.get(subject).toString();
+            } catch (IllegalAccessException e) {
+                throw new AssertionError("Field with modified access modifier inaccessible", e);
+            }
 
-	}
+        }
 
         return String.format("\t%s (%s) %s%n", name, type, value);
     }
@@ -105,33 +105,33 @@ public class ReflectiveRenderer implements Renderer {
      */
     private Optional<Renderer> getSpecialRenderer(Field field) {
         return Arrays.stream(field.getDeclaredAnnotations())
-	    .filter(annotation -> annotation.annotationType() == (RENDER_ANNOTATION_TYPE))
-	    .map(annotation -> ((RenderMe)annotation).with())
-	    .findAny()
-	    .map(className -> {
+            .filter(annotation -> annotation.annotationType() == (RENDER_ANNOTATION_TYPE))
+            .map(annotation -> ((RenderMe)annotation).with())
+            .findAny()
+            .map(className -> {
 
-	        // don't instantiate a new renderer if it is of the same type as this object
-	        if (className.equals(getClass().getCanonicalName())) {
-	            return null;
-		}
+                // don't instantiate a new renderer if it is of the same type as this object
+                if (className.equals(getClass().getCanonicalName())) {
+                    return null;
+                }
 
-		try {
-		    checkAccess(field);
+                try {
+                    checkAccess(field);
 
-		    Object instance;
-		    Object fieldValue = field.get(subject);
+                    Object instance;
+                    Object fieldValue = field.get(subject);
 
-		    instance = Class.forName(className).getConstructor(Object.class).newInstance(fieldValue);
+                    instance = Class.forName(className).getConstructor(Object.class).newInstance(fieldValue);
 
-		    if (instance instanceof Renderer) {
-			return (Renderer)instance;
-		    }
-		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-		    System.err.printf("Classname specified in RenderMe.with must be a Renderer, was %s", className);
-		}
+                    if (instance instanceof Renderer) {
+                        return (Renderer)instance;
+                    }
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+                    System.err.printf("Classname specified in RenderMe.with must be a Renderer, was %s", className);
+                }
 
-		return null;
-	    });
+                return null;
+            });
     }
 
     /**
@@ -159,7 +159,7 @@ public class ReflectiveRenderer implements Renderer {
 
         // add all fields for the superclasses
         Class superClassClass = subjectClass.getSuperclass();
-	while (superClassClass != Object.class && superClassClass != null) {
+        while (superClassClass != Object.class && superClassClass != null) {
             fields.addAll(Arrays.asList(superClassClass.getDeclaredFields()));
             superClassClass = superClassClass.getSuperclass();
         }

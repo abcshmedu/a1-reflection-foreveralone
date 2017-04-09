@@ -32,7 +32,7 @@ public class ArrayRenderer implements Renderer {
      * @param subject {@see ArrayRenderer#subject}
      */
     public ArrayRenderer(Object... subject) {
-	this.subject = subject;
+        this.subject = subject;
     }
 
     /**
@@ -41,7 +41,7 @@ public class ArrayRenderer implements Renderer {
      * @param subject {@see ArrayRenderer#subject} primitive[], Object[] or Object
      */
     public ArrayRenderer(Object subject) {
-	this.subject = deflateArray(subject);
+        this.subject = deflateArray(subject);
     }
 
 
@@ -54,25 +54,25 @@ public class ArrayRenderer implements Renderer {
     public String render() {
         if (subject == null) {
             return NULL_STRING;
-	}
-	if (subject.length == 0) {
-	    return EMPTY_SUBJECT_STRING;
-	}
+        }
+        if (subject.length == 0) {
+            return EMPTY_SUBJECT_STRING;
+        }
 
-	StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-	sb.append("[");
+        sb.append("[");
 
-	for (int i = 0; i < subject.length - 1; i++) {
-	    Object o = subject[i];
-	    sb.append(String.format("%s ,", toStringOfNullable(o)));
-	}
+        for (int i = 0; i < subject.length - 1; i++) {
+            Object o = subject[i];
+            sb.append(String.format("%s ,", toStringOfNullable(o)));
+        }
 
-	// last element treated specially because of StringBuilder
-	Object lastElement = subject[subject.length - 1];
-	sb.append(String.format("%s]", toStringOfNullable(lastElement)));
+        // last element treated specially because of StringBuilder
+        Object lastElement = subject[subject.length - 1];
+        sb.append(String.format("%s]", toStringOfNullable(lastElement)));
 
-	return sb.toString();
+        return sb.toString();
     }
 
     /**
@@ -82,7 +82,7 @@ public class ArrayRenderer implements Renderer {
      * @return the toString() of the given object, or "null"
      */
     private String toStringOfNullable(Object object) {
-	return object == null ? NULL_STRING : object.toString();
+        return object == null ? NULL_STRING : object.toString();
     }
 
     /**
@@ -90,38 +90,38 @@ public class ArrayRenderer implements Renderer {
      *
      * If the given array was not of an array type, an array of the length 1 containing the element is returned
      *  if the given array was of primitive type, the values will be wrapped
-     * @param array 	If not of an array type, an array of the length 1 containing the element is returned
-     *			if of primitive array type, the values will be wrapped
-     *			if null, null is returned
+     * @param array     If not of an array type, an array of the length 1 containing the element is returned
+     *                  if of primitive array type, the values will be wrapped
+     *                  if null, null is returned
      * @return @see param array
      */
     private static Object[] deflateArray(Object array) {
         if (array == null) {
             return null;
-	}
+        }
         if (!array.getClass().isArray()) {
             // if the parameter wasn't an array, wrap it into one
             return new Object[] {array};
-	}
+        }
 
-	// cast and wrap to the type of the array
-	switch(array.getClass().getTypeName()) {
-	    case "boolean[]" :
-	        return ArrayUtils.toObject((boolean[])array);
-	    case "byte[]" :
-		return ArrayUtils.toObject((byte[])array);
-	    case "short[]" :
-		return ArrayUtils.toObject((short[])array);
-	    case "int[]" :
-		return ArrayUtils.toObject((int[])array);
-	    case "long[]" :
-		return ArrayUtils.toObject((long[])array);
-	    case "float[]" :
-		return ArrayUtils.toObject((float[])array);
-	    case "double[]" :
-		return ArrayUtils.toObject((double[])array);
-	    default:
-	        return (Object[])array;
-	}
+        // cast and wrap to the type of the array
+        switch(array.getClass().getTypeName()) {
+            case "boolean[]" :
+                return ArrayUtils.toObject((boolean[])array);
+            case "byte[]" :
+                return ArrayUtils.toObject((byte[])array);
+            case "short[]" :
+                return ArrayUtils.toObject((short[])array);
+            case "int[]" :
+                return ArrayUtils.toObject((int[])array);
+            case "long[]" :
+                return ArrayUtils.toObject((long[])array);
+            case "float[]" :
+                return ArrayUtils.toObject((float[])array);
+            case "double[]" :
+                return ArrayUtils.toObject((double[])array);
+            default:
+                return (Object[])array;
+        }
     }
 }
