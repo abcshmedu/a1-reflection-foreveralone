@@ -1,10 +1,14 @@
 package edu.hm.weidacher.softarch.reflection;
 
+
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
- * @author Simon Weidacher <simon.weidacher@timebay.eu>
+ * @author Simon Weidacher <weidache@hm.edu>
  */
 public class ArrayRenderer implements Renderer {
 
+    private static final String EMPTY_SUBJECT_STRING = "[ /empty/ ]";
     /**
      * Array of objects that will be rendered.
      */
@@ -12,6 +16,7 @@ public class ArrayRenderer implements Renderer {
 
     /**
      * Ctor.
+     *
      * @param subject {@see ArrayRenderer#subject}
      */
     public ArrayRenderer(Object... subject) {
@@ -19,104 +24,18 @@ public class ArrayRenderer implements Renderer {
     }
 
     /**
-     * Ctor wrapping primitive boolean arrays
+     * Ctor.
+     *
      * @param subject {@see ArrayRenderer#subject}
      */
-    public ArrayRenderer(boolean... subject) {
-	final Boolean[] wrapped = new Boolean[subject.length];
-
-	for (int i = 0; i < subject.length; i++) {
-	    wrapped[i] = subject[i];
+    public ArrayRenderer(Object subject) {
+	if (!subject.getClass().isArray()) {
+	    throw new IllegalArgumentException("This renderer can only render Array types");
 	}
 
-	this.subject = wrapped;
+	this.subject = deflateArray(subject);
     }
 
-    /**
-     * Ctor wrapping primitive byte arrays
-     * @param subject {@see ArrayRenderer#subject}
-     */
-
-    public ArrayRenderer(byte... subject) {
-	final Byte[] wrapped = new Byte[subject.length];
-
-	for (int i = 0; i < subject.length; i++) {
-	    wrapped[i] = subject[i];
-	}
-
-	this.subject = wrapped;
-    }
-
-    /**
-     * Ctor wrapping primitive short arrays
-     * @param subject {@see ArrayRenderer#subject}
-     */
-
-    public ArrayRenderer(short... subject) {
-	final Short[] wrapped = new Short[subject.length];
-
-	for (int i = 0; i < subject.length; i++) {
-	    wrapped[i] = subject[i];
-	}
-
-	this.subject = wrapped;
-    }
-
-    /**
-     * Ctor wrapping primitive int arrays
-     * @param subject {@see ArrayRenderer#subject}
-     */
-    public ArrayRenderer(int... subject) {
-	final Integer[] wrapped = new Integer[subject.length];
-
-	for (int i = 0; i < subject.length; i++) {
-	    wrapped[i] = subject[i];
-	}
-
-	this.subject = wrapped;
-    }
-
-    /**
-     * Ctor wrapping primitive long arrays
-     * @param subject {@see ArrayRenderer#subject}
-     */
-    public ArrayRenderer(long... subject) {
-	final Long[] wrapped = new Long[subject.length];
-
-	for (int i = 0; i < subject.length; i++) {
-	    wrapped[i] = subject[i];
-	}
-
-	this.subject = wrapped;
-    }
-
-    /**
-     * Ctor wrapping primitive float arrays
-     * @param subject {@see ArrayRenderer#subject}
-     */
-    public ArrayRenderer(float... subject) {
-	final Float[] wrapped = new Float[subject.length];
-
-	for (int i = 0; i < subject.length; i++) {
-	    wrapped[i] = subject[i];
-	}
-
-	this.subject = wrapped;
-    }
-
-    /**
-     * Ctor wrapping primitive double arrays
-     * @param subject {@see ArrayRenderer#subject}
-     */
-    public ArrayRenderer(double... subject) {
-	final Double[] wrapped = new Double[subject.length];
-
-	for (int i = 0; i < subject.length; i++) {
-	    wrapped[i] = subject[i];
-	}
-
-	this.subject = wrapped;
-    }
 
     /**
      * Takes the object, the Renderer was constructed with and renders it.
@@ -125,6 +44,57 @@ public class ArrayRenderer implements Renderer {
      */
     @Override
     public String render() {
-	return null;
+	if (subject.length == 0) {
+	    return EMPTY_SUBJECT_STRING;
+	}
+
+	StringBuilder sb = new StringBuilder();
+
+	sb.append("[");
+
+	for (int i = 0; i < subject.length - 1; i++) {
+	    Object o = subject[i];
+	    sb.append(String.format("%s ,", o == null ? "null" : o.toString()));
+	}
+
+	Object lastElemenent = subject[subject.length -1];
+
+	sb.append(String.format("%s]", lastElemenent == null ? "null" : lastElemenent.toString()));
+
+	return sb.toString();
+    }
+
+    /**
+     * Deflates the given object to an array.
+     *
+     * If the given array was not of an array type, an array of the length 1 containing the element is returned
+     *  if the given array was of primitive type, the values will be wrapped
+     * @param array
+     * @return
+     */
+    private static Object[] deflateArray(Object array) {
+        if (!array.getClass().isArray()) {
+            // if the parameter wasn't an array, wrap it into one
+            return new Object[] {array};
+	}
+
+	switch(array.getClass().getTypeName()) {
+	    case "boolean[]" :
+	        return ArrayUtils.toObject((boolean[])array);
+	    case "byte[]" :
+		return ArrayUtils.toObject((byte[])array);
+	    case "short[]" :
+		return ArrayUtils.toObject((short[])array);
+	    case "int[]" :
+		return ArrayUtils.toObject((int[])array);
+	    case "long[]" :
+		return ArrayUtils.toObject((long[])array);
+	    case "float[]" :
+		return ArrayUtils.toObject((float[])array);
+	    case "double[]" :
+		return ArrayUtils.toObject((double[])array);
+	    default:
+	        return (Object[])array;
+	}
     }
 }

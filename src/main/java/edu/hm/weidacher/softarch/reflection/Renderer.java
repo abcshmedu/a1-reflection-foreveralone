@@ -4,7 +4,7 @@ package edu.hm.weidacher.softarch.reflection;
  * Renderer Interface.
  *
  * Derivatives of this class can render the state of an object to a representative string.
- * @author Simon Weidacher <simon.weidacher@timebay.eu>
+ * @author Simon Weidacher <weidache@hm.edu>
  */
 public interface Renderer {
 
